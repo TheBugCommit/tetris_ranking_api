@@ -35,14 +35,14 @@ class ScoreIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /ranking")
+    @DisplayName("POST /api/ranking")
     void shouldPersistScoreInRealDatabase() throws Exception {
         ScoreRequest request = new ScoreRequest();
         request.setPlayerName("JugadorReal");
         request.setLevel(2);
         request.setTotalLines(40);
 
-        mockMvc.perform(post("/ranking")
+        mockMvc.perform(post("/api/ranking")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isCreated())
@@ -53,14 +53,14 @@ class ScoreIntegrationTest {
     }
 
     @Test
-    @DisplayName("POST /ranking (Error)")
+    @DisplayName("POST /api/ranking (Error)")
     void shouldTriggerRealServiceLogicAndReturnError() throws Exception {
         ScoreRequest request = new ScoreRequest();
         request.setPlayerName("Hacker");
         request.setLevel(1);
         request.setTotalLines(-100);
 
-        mockMvc.perform(post("/ranking")
+        mockMvc.perform(post("/api/ranking")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isBadRequest()) // Esperamos 400 Bad Request
@@ -71,7 +71,7 @@ class ScoreIntegrationTest {
     }
 
     @Test
-    @DisplayName("GET /ranking")
+    @DisplayName("GET /api/ranking")
     void shouldReturnRankingOrderedByScore() throws Exception {
         Score scoreBajo = new Score();
         scoreBajo.setPlayerName("Novato");
@@ -85,7 +85,7 @@ class ScoreIntegrationTest {
         scoreAlto.setTotalLines(9000);
         scoreRepository.save(scoreAlto);
 
-        mockMvc.perform(get("/ranking")
+        mockMvc.perform(get("/api/ranking")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
