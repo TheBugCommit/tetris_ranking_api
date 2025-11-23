@@ -9,4 +9,4 @@ public class RankingResponse {
     private Integer level;
     private Integer totalLines;
     private LocalDateTime playedAt;
-}a
+}
