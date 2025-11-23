@@ -1,9 +1,9 @@
 package daaw.tetris_ranking_api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import daaw.tetris_ranking_api.score.Score;
-import daaw.tetris_ranking_api.score.ScoreRepository;
-import daaw.tetris_ranking_api.score.dto.ScoreRequest;
+import daaw.tetris_ranking_api.ranking.Ranking;
+import daaw.tetris_ranking_api.ranking.RankingRepository;
+import daaw.tetris_ranking_api.ranking.dto.RankingRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,23 +21,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ScoreIntegrationTest {
+class RankingIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
-    private ScoreRepository scoreRepository;
+    private RankingRepository rankingRepository;
     @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        scoreRepository.deleteAll();
+        rankingRepository.deleteAll();
     }
 
     @Test
     @DisplayName("POST /api/ranking")
     void shouldPersistScoreInRealDatabase() throws Exception {
-        ScoreRequest request = new ScoreRequest();
+        RankingRequest request = new RankingRequest();
         request.setPlayerName("JugadorReal");
         request.setLevel(2);
         request.setTotalLines(40);
@@ -48,14 +48,14 @@ class ScoreIntegrationTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.playerName").value("JugadorReal"));
 
-        assertEquals(1, scoreRepository.count());
-        assertEquals("JugadorReal", scoreRepository.findAll().get(0).getPlayerName());
+        assertEquals(1, rankingRepository.count());
+        assertEquals("JugadorReal", rankingRepository.findAll().get(0).getPlayerName());
     }
 
     @Test
     @DisplayName("POST /api/ranking (Error)")
     void shouldTriggerRealServiceLogicAndReturnError() throws Exception {
-        ScoreRequest request = new ScoreRequest();
+        RankingRequest request = new RankingRequest();
         request.setPlayerName("Hacker");
         request.setLevel(1);
         request.setTotalLines(-100);
@@ -67,23 +67,23 @@ class ScoreIntegrationTest {
                 .andExpect(jsonPath("$.error").value("Bad Request"))
                 .andExpect(jsonPath("$.message").value("Lines must be positive"));
 
-        assertEquals(0, scoreRepository.count());
+        assertEquals(0, rankingRepository.count());
     }
 
     @Test
     @DisplayName("GET /api/ranking")
     void shouldReturnRankingOrderedByScore() throws Exception {
-        Score scoreBajo = new Score();
-        scoreBajo.setPlayerName("Novato");
-        scoreBajo.setLevel(1);
-        scoreBajo.setTotalLines(100);
-        scoreRepository.save(scoreBajo);
+        Ranking rankingBajo = new Ranking();
+        rankingBajo.setPlayerName("Novato");
+        rankingBajo.setLevel(1);
+        rankingBajo.setTotalLines(100);
+        rankingRepository.save(rankingBajo);
 
-        Score scoreAlto = new Score();
-        scoreAlto.setPlayerName("Pro");
-        scoreAlto.setLevel(10);
-        scoreAlto.setTotalLines(9000);
-        scoreRepository.save(scoreAlto);
+        Ranking rankingAlto = new Ranking();
+        rankingAlto.setPlayerName("Pro");
+        rankingAlto.setLevel(10);
+        rankingAlto.setTotalLines(9000);
+        rankingRepository.save(rankingAlto);
 
         mockMvc.perform(get("/api/ranking")
                         .contentType(MediaType.APPLICATION_JSON))

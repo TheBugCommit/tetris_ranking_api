@@ -1,4 +1,4 @@
-package daaw.tetris_ranking_api.score;
+package daaw.tetris_ranking_api.ranking;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Table(name = "scores")
 @Data
 @NoArgsConstructor
-public class Score {
+public class Ranking {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
