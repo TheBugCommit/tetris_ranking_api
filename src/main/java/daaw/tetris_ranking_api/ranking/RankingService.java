@@ -15,7 +15,7 @@ public class RankingService {
         this.rankingRepository = rankingRepository;
     }
 
-    public RankingResponse saveScore(RankingRequest request) {
+    public RankingResponse saveRanking(RankingRequest request) {
         if(request.getPlayerName() == null || request.getPlayerName().isEmpty()
                 || request.getPlayerName().isBlank()) {
             throw new IllegalArgumentException("PlayerName can't be null or empty");
@@ -37,7 +37,7 @@ public class RankingService {
         return mapToResponse(savedRanking);
     }
 
-    public List<RankingResponse> getTopScores() {
+    public List<RankingResponse> getTopRanking() {
         List<Ranking> entities = rankingRepository.findTop10ByOrderByTotalLinesDesc();
 
         return entities.stream()

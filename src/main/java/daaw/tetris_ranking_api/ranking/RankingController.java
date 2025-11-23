@@ -19,13 +19,13 @@ public class RankingController {
     }
 
     @PostMapping
-    public ResponseEntity<RankingResponse> addScore(@RequestBody RankingRequest request) {
-        RankingResponse savedScore = rankingService.saveScore(request);
+    public ResponseEntity<RankingResponse> addRanking(@RequestBody RankingRequest request) {
+        RankingResponse savedScore = rankingService.saveRanking(request);
         return new ResponseEntity<>(savedScore, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<RankingResponse>> getRanking() {
-        return ResponseEntity.ok(rankingService.getTopScores());
+        return ResponseEntity.ok(rankingService.getTopRanking());
     }
 }
