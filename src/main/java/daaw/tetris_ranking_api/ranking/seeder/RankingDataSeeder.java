@@ -3,12 +3,14 @@ package daaw.tetris_ranking_api.ranking.seeder;
 import daaw.tetris_ranking_api.ranking.RankingService;
 import daaw.tetris_ranking_api.ranking.dto.RankingRequest;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 @Component
+@Profile("dev")
 public class RankingDataSeeder implements CommandLineRunner {
 
     private final RankingService rankingService;
