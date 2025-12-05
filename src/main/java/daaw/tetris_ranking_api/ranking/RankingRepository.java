@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface RankingRepository extends JpaRepository<Ranking, Long> {
     List<Ranking> findTop10ByOrderByTotalLinesDesc();
+    boolean existsByPlayerNameAndLevelAndTotalLines(String playerName, Integer level, Integer totalLines);
 }

@@ -27,10 +27,18 @@ public class RankingService {
             throw new IllegalArgumentException("Lines must be positive");
         }
 
+        String playerName = request.getPlayerName();
+        int level = request.getLevel();
+        int totalLines = request.getTotalLines();
+
+        if(rankingRepository.existsByPlayerNameAndLevelAndTotalLines(playerName, level, totalLines)) {
+            throw new IllegalArgumentException("Ranking already exists");
+        }
+
         Ranking ranking = new Ranking();
-        ranking.setPlayerName(request.getPlayerName());
-        ranking.setLevel(request.getLevel());
-        ranking.setTotalLines(request.getTotalLines());
+        ranking.setPlayerName(playerName);
+        ranking.setLevel(level);
+        ranking.setTotalLines(totalLines);
 
         Ranking savedRanking = rankingRepository.save(ranking);
 
