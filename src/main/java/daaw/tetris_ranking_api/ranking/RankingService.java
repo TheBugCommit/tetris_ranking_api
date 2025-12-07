@@ -4,6 +4,7 @@ import daaw.tetris_ranking_api.ranking.dto.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,8 +32,10 @@ public class RankingService {
         int level = request.getLevel();
         int totalLines = request.getTotalLines();
 
-        if(rankingRepository.existsByPlayerNameAndLevelAndTotalLines(playerName, level, totalLines)) {
-            throw new IllegalArgumentException("Ranking already exists");
+        Optional<Ranking> rank = rankingRepository.findByPlayerNameAndLevelAndTotalLines(playerName, level, totalLines);
+
+        if(rank.isPresent()) {
+            return mapToResponse(rank.get());
         }
 
         Ranking ranking = new Ranking();
